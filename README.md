@@ -1,66 +1,175 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# JetStream - Travel & Tourism Booking Platform
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A complete travel and tourism booking platform built with **Laravel 12**. Users can browse and book hotels, flights, restaurants, activities, vacation rentals, cruises, and rental cars. Includes a full admin dashboard for managing all services and users.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### For Users
+- **Multi-Service Booking** - Book hotels, flights, restaurants, activities, vacation rentals, cruises, and rental cars
+- **Search & Filter** - Global search across all services, filter flights by criteria, activities by category/location
+- **Reservations** - Manage bookings with status tracking (pending/confirmed)
+- **Reviews & Ratings** - Rate and review hotels, flights, activities, and more (polymorphic system)
+- **User Profile** - Profile management with photo upload and settings
+- **Two-Factor Authentication** - Secure 2FA login support
+- **Forum** - Community discussion topics and posts
+- **Notifications** - In-app notification system with read/unread tracking
+- **Contact Form** - Direct email contact form
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### For Admins
+- **Admin Dashboard** - Overview with service stats, reservation count, user count, and recent activity
+- **Hotels Management** - Full CRUD (create, read, update, delete) for hotels with star ratings and pricing
+- **Flights Management** - Manage flights with airline, airports, times, duration, and pricing
+- **Restaurants Management** - Manage restaurants with cuisine types, ratings, opening hours, and images
+- **Activities Management** - Manage activities with categories, duration, pricing, and media
+- **User Management** - Create, edit, and delete users with role assignment
+- **Booking Management** - View and manage all user bookings
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Tech Stack
 
-## Learning Laravel
+- **Framework**: Laravel 12
+- **PHP**: 8.2+
+- **Authentication**: Laravel Jetstream + Sanctum (with 2FA support)
+- **Reactive Components**: Livewire 3
+- **Database**: SQLite (default) / MySQL / PostgreSQL
+- **ORM**: Eloquent with polymorphic relationships
+- **Media**: Spatie Laravel Media Library for image handling
+- **Frontend**: Blade Templates + Tailwind CSS 3 + Bootstrap 5
+- **Charts**: Chart.js for dashboard analytics
+- **Build Tool**: Vite 5
+- **Icons**: Font Awesome 6
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Database Structure
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Core Tables
+- **users** - User accounts with admin flag, role, 2FA fields, profile photo
+- **hotels** - Hotel listings (name, city, country, star rating, price per night)
+- **flights** - Flight listings (airline, airports, times, duration, price)
+- **restaurants** - Restaurant listings (cuisine type, rating, opening hours, images)
+- **activities** - Activity listings (category, location, duration, price)
+- **vacation_rentals** - Rental properties (type, bedrooms, amenities, max guests)
+- **cruises** - Cruise listings (cruise line, itinerary, dates, price)
+- **rental_cars** - Car rental listings
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Booking & Social
+- **reservations** - Polymorphic bookings for any service type (status: pending/confirmed)
+- **bookings** - Activity-specific bookings
+- **reviews** - Polymorphic reviews with ratings (1-5) for any service
+- **forum_topics** - Community discussion topics
+- **forum_posts** - Forum replies
+- **notifications** - User notification system
 
-## Laravel Sponsors
+## Getting Started
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Prerequisites
 
-### Premium Partners
+- PHP 8.2+
+- Composer
+- Node.js & NPM
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Installation
 
-## Contributing
+```bash
+# Clone the repository
+git clone https://github.com/KHADIJALAH/jetstream-app.git
+cd jetstream-app
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Install PHP dependencies
+composer install
 
-## Code of Conduct
+# Install frontend dependencies
+npm install
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Copy environment file
+cp .env.example .env
 
-## Security Vulnerabilities
+# Generate application key
+php artisan key:generate
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Create SQLite database (or configure MySQL in .env)
+touch database/database.sqlite
 
-## License
+# Run migrations
+php artisan migrate
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Seed the database with sample data
+php artisan db:seed
+
+# Build frontend assets
+npm run build
+
+# Start the development server
+php artisan serve
+```
+
+Open [http://localhost:8000](http://localhost:8000) in your browser.
+
+### Database Seeders
+
+The project includes seeders for all services:
+- Users, Hotels, Flights, Activities, Restaurants
+- Vacation Rentals, Cruises, Rental Cars
+- Forum Topics & Posts, Reservations, Reviews
+
+### Admin Access
+
+Register a user and set `is_admin = true` in the database, or use the seeded admin account.
+
+## Project Structure
+
+```
+JetStream/
+├── app/
+│   ├── Http/Controllers/
+│   │   ├── Admin/                    # Admin CRUD controllers
+│   │   │   ├── ActivityController.php
+│   │   │   ├── BookingController.php
+│   │   │   ├── FlightController.php
+│   │   │   ├── HotelController.php
+│   │   │   ├── RestaurantController.php
+│   │   │   └── UserController.php
+│   │   ├── HomeController.php        # Landing page
+│   │   ├── AuthController.php        # Authentication
+│   │   ├── HotelController.php       # Hotel browsing
+│   │   ├── FlightController.php      # Flight search
+│   │   ├── ActivityController.php    # Activity browsing
+│   │   ├── RestaurantController.php  # Restaurant browsing
+│   │   ├── ReservationController.php # User reservations
+│   │   └── ...
+│   ├── Models/
+│   │   ├── User.php, Hotel.php, Flight.php
+│   │   ├── Restaurant.php, Activity.php
+│   │   ├── VacationRental.php, Cruise.php
+│   │   ├── Reservation.php, Review.php
+│   │   ├── ForumTopic.php, ForumPost.php
+│   │   └── Notification.php
+│   └── Livewire/                     # Livewire components
+├── database/
+│   ├── migrations/                   # 36 migration files
+│   └── seeders/                      # 12 seeders for all models
+├── resources/views/
+│   ├── layouts/                      # App & admin layouts
+│   ├── admin/                        # Admin panel views
+│   ├── hotels/, flights/, activities/
+│   ├── restaurants/, rentals/, cruises/
+│   ├── reservations/, forum/, search/
+│   ├── home.blade.php, about.blade.php
+│   └── contact.blade.php
+├── routes/web.php                    # All application routes
+└── ...
+```
+
+## Routes Overview
+
+| Section | Routes | Description |
+|---------|--------|-------------|
+| Public | `/`, `/hotels`, `/flights`, `/activities`, `/restaurants` | Browse services |
+| Public | `/search`, `/about`, `/contact` | Search & info pages |
+| Auth | `/login`, `/register`, `/logout` | User authentication |
+| User | `/reservations`, `/notifications`, `/profile`, `/settings` | User dashboard |
+| Admin | `/admin/dashboard` | Admin statistics overview |
+| Admin | `/admin/hotels`, `/admin/flights`, `/admin/restaurants`, `/admin/activities` | Service CRUD |
+| Admin | `/admin/users`, `/admin/bookings` | User & booking management |
+
+## Author
+
+**Khadija Lahlou** - [GitHub](https://github.com/KHADIJALAH)
