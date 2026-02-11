@@ -1,34 +1,113 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\HotelController;
-use App\Http\Controllers\ActivityController;
-use App\Http\Controllers\RestaurantController;
-use App\Http\Controllers\ReservationController;
-use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Http\Controllers\{
+    HomeController,
+    AuthController,
+    HotelController,
+    ActivityController,
+    RestaurantController,
+    FlightController,
+    VacationRentalController,
+    CruiseController,
+    RentalCarController,
+    ForumController,
+    Admin\UserController,
+    Admin\BookingController,
+    Admin\HotelController as AdminHotelController,
+    Admin\FlightController as AdminFlightController,
+    Admin\RestaurantController as AdminRestaurantController,
+    Admin\ActivityController as AdminActivityController, // Correction de la virgule
+    NotificationController,
+    DashboardController,
+    ReservationController,
+    Auth\LoginController,
+    Auth\RegisterController,
+    UserProfileController,
+    AdminController,
+    ServiceController
+};
 
-Route::get('/', function () {
-    return view('index'); // Page d'accueil
+// 🔓 Routes publiques
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/search', [HomeController::class, 'search'])->name('home.search');
+Route::view('/about', 'about')->name('about');
+Route::view('/contact', 'contact')->name('contact');
+Route::view('/feedback', 'feedback')->name('feedback');
+
+// 📩 Formulaire de contact
+Route::post('/contact', function (Request $request) {
+    $data = $request->validate([
+        'name' => 'required',
+        'email' => 'required|email',
+        'message' => 'required',
+    ]);
+
+    Mail::raw("Name: " . $data['name'] . "\nEmail: " . $data['email'] . "\nMessage:\n" . $data['message'], function ($message) {
+        $message->to(config('mail.from.address'))->subject('New Contact Form Submission');
+    });
+
+    return redirect()->route('contact')->with('success', 'Votre message a été envoyé avec succès !');
+})->name('contact.submit');
+
+// 🌍 Services publics
+Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
+Route::get('/flights', [FlightController::class, 'index'])->name('flights.index');
+Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
+Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
+
+// 🔐 Authentification
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [RegisterController::class, 'register']);
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
 });
 
-// Routes pour l'authentification
-Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/profile', [UserProfileController::class, 'edit'])->name('user.profile');
 
-// Routes pour les hôtels
-Route::get('/hotels', [HotelController::class, 'index'])->name('hotels.index');
-Route::get('/hotels/{id}', [HotelController::class, 'show'])->name('hotels.show');
+    Route::get('/settings', function () {
+        return view('settings', ['user' => Auth::user()]);
+    })->name('settings');
+});
 
-// Routes pour les activités
-Route::get('/activities', [ActivityController::class, 'index'])->name('activities.index');
-Route::get('/activities/{id}', [ActivityController::class, 'show'])->name('activities.show');
+// 🛠 Routes Admin
+Route::prefix('admin')
+    ->as('admin.')
+    ->middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])
+    ->group(function () {
+        // Dashboard
+        Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
 
-// Routes pour les restaurants
-Route::get('/restaurants', [RestaurantController::class, 'index'])->name('restaurants.index');
-Route::get('/restaurants/{id}', [RestaurantController::class, 'show'])->name('restaurants.show');
+        // Ressources administratives
+        Route::resource('hotels', AdminHotelController::class)->except(['show']);
+        Route::resource('flights', AdminFlightController::class)->except(['show']);
+        Route::resource('restaurants', AdminRestaurantController::class)->except(['show']);
+        Route::resource('activities', AdminActivityController::class)->except(['show']);
 
-// Routes pour les réservations
-Route::get('/reservations', [ReservationController::class, 'index'])->name('reservations.index');
-Route::post('/reservations', [ReservationController::class, 'store'])->name('reservations.store');
+        // 🧪 Debug
+        Route::get('/test-flight', function () {
+            return view('admin.flights.index');
+        })->name('flights.test');
+
+        // Services
+        Route::get('/services', [ServiceController::class, 'index'])->name('services');
+
+        // Réservations
+        Route::get('/bookings', [BookingController::class, 'index'])->name('bookings');
+
+        // Utilisateurs
+        Route::resource('users', UserController::class)->except(['show']);
+    });
+
+// 🔚 Page 404 personnalisée
+Route::fallback(function () {
+    return view('errors.404');
+});

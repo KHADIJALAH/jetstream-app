@@ -4,18 +4,21 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHotelsTable extends Migration
+class CreateReservationsTable extends Migration
 {
     public function up()
     {
-        Schema::create('hotels', function (Blueprint $table) {
+        Schema::create('reservations', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); // Nom de l'hôtel
-            $table->string('location'); // Localisation de l'hôtel
-            $table->text('description'); // Description de l'hôtel
-            $table->decimal('rating', 3, 2); // Note sur 5
-            $table->timestamps(); // Horodatage
+            $table->foreignId('user_id')->constrained();
+            $table->morphs('reservable');
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->decimal('total_price', 10, 2);
+            $table->string('status')->default('pending');
+            $table->timestamps();
         });
+        
     }
 
     public function down()

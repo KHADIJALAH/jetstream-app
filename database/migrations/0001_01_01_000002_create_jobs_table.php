@@ -1,3 +1,5 @@
+// ... existing code ...
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;

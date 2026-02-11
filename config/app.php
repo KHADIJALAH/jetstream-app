@@ -118,9 +118,15 @@ return [
     |
     */
 
-    'maintenance' => [
-        'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
-        'store' => env('APP_MAINTENANCE_STORE', 'database'),
+   'maintenance' => [
+    'secret' => env('MAINTENANCE_SECRET'),
+    'refresh' => 60,
+    'template' => resource_path('views/errors/503.blade.php'),
+    'paths' => [
+        'login',
+        'logout',
+        '/health',
     ],
+],
 
 ];

@@ -13,14 +13,16 @@ return new class extends Migration
     {
         Schema::create('restaurants', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('location');
-            $table->text('description')->nullable();
-            $table->string('image')->nullable();
-            $table->decimal('average_price', 8, 2);
+            $table->string('name');                         // Nom du restaurant
+            $table->string('cuisine_type');                 // Type de cuisine
+            $table->text('address');                        // Adresse complète
+            $table->string('phone');                        // Numéro de téléphone
+            $table->decimal('rating', 3, 1)->nullable()->default(0); // Note moyenne
+            $table->json('opening_hours')->nullable();      // Horaires d’ouverture (format JSON)
+            $table->string('slug')->unique();               // Slug unique pour URL
+            $table->string('image')->nullable();            // Chemin de l'image
             $table->timestamps();
         });
-        
     }
 
     /**
